@@ -27,36 +27,35 @@ class ReservationCardTest {
 
     private  WebDriver driver;
 
-//    @BeforeAll
-//    static void setUpAll() {
-//        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-//        WebDriverManager.chromedriver().setup();
-//    }
-//
-//    @BeforeEach
-//    void setUp() {
-//        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--disable-dev-shm-usage");
-//        options.addArguments("--no-sandbox");
-//        options.addArguments("--headless");
-//        driver = new ChromeDriver(options);
-//    }
-
-//========= Драйвер для Microsoft Edge (не работает с Appveyor !!!) =========
-
     @BeforeAll
     static void setUpAll() {
-        System.setProperty("webdriver.edge.driver", "drivers/msedgedriver.exe");
-        WebDriverManager.edgedriver().setup();
+        WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     void setUp() {
-        Configuration.browser = "edge";
-        EdgeOptions options = new EdgeOptions();
-        options.setCapability("goog:chromeOptions", ImmutableMap.of("w3c", false)); // отключение w3c протокола
-        driver = new EdgeDriver(options);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
     }
+
+//========= Драйвер для Microsoft Edge (не работает с Appveyor !!!) =========
+
+//    @BeforeAll
+//    static void setUpAll() {
+//        System.setProperty("webdriver.edge.driver", "drivers/msedgedriver.exe");
+//        WebDriverManager.edgedriver().setup();
+//    }
+//
+//    @BeforeEach
+//    void setUp() {
+//        Configuration.browser = "edge";
+//        EdgeOptions options = new EdgeOptions();
+//        options.setCapability("goog:chromeOptions", ImmutableMap.of("w3c", false)); // отключение w3c протокола
+//        driver = new EdgeDriver(options);
+//    }
 
 //============================================================================
 
@@ -70,7 +69,6 @@ class ReservationCardTest {
     void shouldReservationCard() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
-        //$$(".tab-item").find(exactText("По номеру счёта")).click();
         $("[data-test-id='city'] .input__control").setValue("Калуга");
         $("[data-test-id='date'] .input__control").click();
         $("[data-test-id='date'] .input__control").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME));
@@ -81,11 +79,7 @@ class ReservationCardTest {
         $("[data-test-id='phone'] [name='phone']").setValue("+79200000000");
         $("[data-test-id='agreement'] .checkbox__box").click();
         $(byText("Забронировать")).click();
-        //$(withText("Встреча успешно забронирована на " + dateForReservation)).shouldBe(visible, Duration.ofMillis(15000));
         $(withText("Встреча успешно забронирована на")).shouldBe(visible, Duration.ofMillis(15000));
-        //$$("button").find(exactText("Забронировать")).click();
-        //$(withText("Успешная авторизация")).shouldBe(visible, Duration.ofMillis(5000));
-        //$(byText("Личный кабинет")).shouldBe(visible, Duration.ofMillis(5000));
     }
 }
 

@@ -1,0 +1,1 @@
+[app-card-delivery.jar](artifacts%2Fapp-card-delivery.jar)
