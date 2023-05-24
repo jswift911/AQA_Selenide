@@ -99,9 +99,9 @@ class ReservationCardTest {
         $(".calendar-input [type='button']").click();
         String dateForReservation = LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("d"));
         SelenideElement day = $(By.xpath("//*[contains(@class, 'calendar-input__calendar-wrapper')]//*[contains(@class, 'calendar__layout')]//*[contains(@class, 'calendar__day') and contains(text(), " + dateForReservation + ")]"));
-        int weekForward = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("d")));
+        int currentDay = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("d")));
 
-        if (Integer.parseInt(dateForReservation) < weekForward) {
+        if (Integer.parseInt(dateForReservation) < currentDay) {
             $(By.xpath("//*[contains(@class, 'calendar__arrow_direction_right') and not(contains(@class, 'calendar__arrow_double'))]")).click();
             day.click();
         } else {
