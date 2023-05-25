@@ -2,9 +2,18 @@ package ru.netology.web;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 
 
 import static com.codeborne.selenide.Selenide.open;
@@ -18,6 +27,51 @@ import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 
 class ReservationCardTest {
+
+    // Если браузер не Chrome, то нужно менять драйвер для работы selenide
+
+    private WebDriver driver;
+
+    @BeforeAll
+    static void setUpAll() {
+        WebDriverManager.chromedriver().setup();
+    }
+
+    @BeforeEach
+    void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+    }
+
+//========= Драйвер для Microsoft Edge (не работает с Appveyor !!!) =========
+
+//    @BeforeAll
+//    static void setUpAll() {
+//        WebDriverManager.edgedriver().setup();
+//    }
+//
+//    @BeforeEach
+//    void setUp() {
+//        Configuration.browser = "edge";
+//        EdgeOptions options = new EdgeOptions();
+//        options.addArguments("--disable-dev-shm-usage");
+//        options.addArguments("--no-sandbox");
+//        options.addArguments("--headless");
+//        driver = new EdgeDriver(options);
+//        driver.get("http://localhost:9999");
+//    }
+
+//============================================================================
+
+    @AfterEach
+    void tearDown() {
+        driver.quit();
+        driver = null;
+    }
+
 
     public String generateDate(int plusDays, String pattern) {
         if (plusDays == 0) {
@@ -60,10 +114,8 @@ class ReservationCardTest {
 
         if (dayForReservation < defaultDay) {
             $(By.xpath("//*[contains(@class, 'calendar__arrow_direction_right') and not(contains(@class, 'calendar__arrow_double'))]")).click();
-            day.click();
-        } else {
-            day.click();
         }
+        day.click();
 
         $("[data-test-id='name'] .input__control").setValue("Иван Петров-Иванов");
         $("[data-test-id='phone'] [name='phone']").setValue("+79200000000");
